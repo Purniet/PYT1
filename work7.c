@@ -44,6 +44,7 @@ int main()
     n = i + 1;
     pick(b, 0);
 
+
     dereplicate(b);
     for(i = 0 ; i < k ; i++)
     {
