@@ -1,92 +1,103 @@
-/*给定一个可能包含重复元素的整数数组 nums，返回该数组所有可能的子集（幂集）。
-
-说明：解集不能包含重复的子集。
-
-示例:
-
-输入: [1,2,2]
-输出:
+/*
+Given a collection of candidate numbers (candidates) and a target number (target),
+find all unique combinations in聽candidates聽where the candidate numbers sums to聽target.
+Each number in聽candidates聽may only be used聽once聽in the combination.
+Input: candidates =聽[10,1,2,7,6,1,5], target =聽8,
+A solution set is:
 [
-  [2],
-  [1],
-  [1,2,2],
-  [2,2],
-  [1,2],
-  []
+  [1, 7],
+  [1, 2, 5],
+  [2, 6],
+  [1, 1, 6]
 ]
 */
-
 #include <stdio.h>
 #include <stdlib.h>
 #define N 100
-#define M 99999
+#define M 9999
 
-int n;
-static int count[M][N] = {0},c[M][N] = {0}, k = 0 ,replicate[M]={0};
-void pick(int a[],int t);
+
+static int c[M][N], target, n, a[N], k, d[M],replicate[M],count[M][N];
+
+void pick(int t, int w);
 void dereplicate(int a[]);
+
 int main()
 {
-    int i ,j = 0;
-    char a[N];
-    int b[N] = {0};
-    printf("Input your integer array (example:[1,2,2]\\n):\n");
+    int i, j = 0;
+    char b[N];
+
+    printf("Input your candidate numbers (example:[1,2,2]\\n):\n");
     getchar();
-    gets(a);
+    gets(b);
     for(i = 0 ; i < N ; i++)
     {
         for( ; j < N ; j++)
         {
-            if(a[j] != ',' && a[j] != ']') b[i] = b[i]*10 + a[j] - '0';
+            if(b[j] != ',' && b[j] != ']') a[i] = a[i]*10 + b[j] - '0';
             else {j++; break;}
         }
-        if(a[j] == '\0') break;
+        if(b[j] == '\0') break;
     }
     n = i + 1;
-    pick(b, 0);
+
+    printf("\nInput your target number:\n");
+    scanf("%d", &target);
+    pick(0, 0);
+    dereplicate(a);
 
 
-    dereplicate(b);
     for(i = 0 ; i < k ; i++)
     {
-        if(replicate[i] == 1)
-        {
-            i++;
-            continue;
-        }
+        if(d[i] == 0) continue;
+        if(replicate[i] == 0)
+      {
+
+
+
         printf("[");
         int q = 0;
         for(q = 0; q < n ; q++)
         {
-            if(c[i][q]) {printf("%d",b[q]); break;}
+            if(c[i][q]) {printf("%d",a[q]); break;}
 
         }
         for(j = q + 1; j < n ; j++)
         {
-            if(c[i][j]) printf(",%d",b[j]);
+            if(c[i][j]) printf(",%d",a[j]);
         }
 
         printf("],\n");
+      }
     }
+
     return 0;
 }
 
- void pick(int a[],int t)
+void pick(int t, int w)
 {
     int i;
+
     if(t > n - 1)
     {
+        if(w == target) d[k] = 1;
         k += 1;
         return;
     }
-    pick(a, ++t);
-    for(i=0;i<t;i++)
+
+    pick(t+1,w);
+
+    if(w+a[t]<=target)
+ {
+     for(i=0;i<t;i++)
     {
         c[k][i]=c[k-1][i];
     }
-    t--;
     c[k][t] = 1;
-    pick(a, ++t);
+
+    pick(1+t,w+a[t]);
+ }
+
 }
 
 void dereplicate(int a[])
